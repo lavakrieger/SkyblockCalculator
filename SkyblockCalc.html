@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Skyblock Calculator</title>
+<!-- CSS !-->
+		<style type="text/css">
+			.body {
+				font-family: arial;
+				color: white;
+			}
+			.features {
+				color: black;
+				position: middle;
+				background: none no-repeat scroll 0 0 #fff;
+				padding: 5px;
+				border: 5px;
+				border-radius: 5px;
+			}
+			.calculator {
+				float: bottom;
+				opacity: 1;
+				border-radius: 3px;
+				border: 3px;
+				border-color: black;
+				border-style: groove;
+			}
+			.calculator button {
+				background-color: lightblue;
+			}
+			.imprint {
+				position: absolute;
+				bottom: 5px;
+				left: 30px;
+			}
+			.twitter-link {
+				color: white;
+			}
+		</style>
+	</head>
+	<body class="body" background="http://i.imgur.com/T9KGNAu.jpg">
+<!-- HTML Content !-->		
+		<h1 style="text-align: center;">Calculator for Hypixel Skyblock</h1>
+		<div style="padding-left: 33%; padding-right: 33%">
+			<div class="features">
+				Leave one of the inputs empty for it to be calculated.
+			 	<p><i>Fields with a * must not be empty</i></p>	
+				
+				<div class="calculator">
+					<h4>Farming with minions:</h4>
+					<p>
+						<input type="number" placeholder="*Action timing in s" id="MinionTiming">
+						<input type="number" placeholder="*Number of Minions" id ="MinionNumber">
+						<input type="number" placeholder="Amount of Items" id="MinionAmountItems">	
+						<input type="number" placeholder="Time in h" id="MinionTotalTime">
+						<input type="number" placeholder="*Fuelbonus in Percent" id="MinionFuel">
+						<select id="MinionBoni">
+							<option value="1">No Boni</option>
+							<option value="2">Double efficiency</option>
+						</select>
+						<button onclick="minion()">Calculate</button>
+					</p>
+				</div>
+				<div class="calculator">
+					<h4>Bank:</h4>
+					<p>
+						<input type="number" placeholder="Your Capital" id="BankCapital">
+						<input type="number" placeholder="Real hours waiting" id="BankTime">
+						<input type="number" placeholder="Capital after waiting" id="BankNewC">
+						<button onclick="bank()">Calculate</button>
+						<p>A season takes 31 hours, you'll get +2% at the beginning of the new Season</p>
+
+					</p>
+				</div>
+				<div class="calculator">
+					<h4>Enchanted Items/Blocks to normal Items:</h4>
+					<p>
+						<select id="EnchantedHowMuchPerItem">
+							<option value="160">2,5 Stacks per enchanted one</option>
+							<option value="192">3 Stacks per enchanted one</option>
+							<option value="20">20 (e.g. Enderpearl)</option>
+						</select>
+						<input type="number" placeholder="How many enchanted Items?" id="EnchantedNumOfEnch">
+						<input type="number" placeholder="Normal Items" id="EnchantedNumOfNormal">
+						<button onclick="enchanted()">Calculate</button>
+
+					</p>
+				</div>
+				<div class="calculator">
+					<h4>Damage of an enchanted Sword</h4>
+					<p>
+						<input type="checkbox" id="DmgSharpness" onclick="console.log(document.getElementById('DmgSharpness'));">Sharpness<br>
+						<input type="checkbox" id="DmgBane">Bane of Arthropods<br>
+						<input type="checkbox" id="DmgCubism">Cubism<br>
+
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<i class="imprint">
+			<a href="https://twitter.com/Lavakri3g3r" class="twitter-link">Lavakrieger</a>'s Hypixel Skyblock Calculator Version 0.2, 11.09.2019
+		</i>
+<!-- Javascript !-->
+		<script type="text/javascript">
+			console.log(document.getElementById("DmgCubism"));
+			function getV(id) {
+				return document.getElementById(id).value;
+			}
+			function minion() {
+				var timing = getV("MinionTiming");
+				var number = getV("MinionNumber");
+				var items = getV("MinionAmountItems");
+				var time = getV("MinionTotalTime");
+				var fuel = getV("MinionFuel");
+				var boni = getV("MinionBoni");
+				if (items.length === 0) {
+					items = number * (boni/2) * (1 + (fuel/10)) * ((time*3600)/timing);
+					document.getElementById("MinionAmountItems").value = items;
+				} else if (time.length === 0) {
+					time = (items * timing) / (1800 * number * (boni/2) * (1 + (fuel/10)));
+					document.getElementById("MinionTotalTime").value = time;
+				}
+			}
+			function bank() {
+				var c = getV("BankCapital"); 
+				var t = getV("BankTime");
+				var newC = document.getElementById("BankNewC").value;
+				if (newC.length === 0) {
+					newC = c * (1.02**(t/31));
+					document.getElementById("BankNewC").value = newC;
+				}
+				else if (c.length === 0) {
+					c = newC / (1.02**(t/31));
+					document.getElementById("BankCapital").value = c;
+				}
+				else if (t.length === 0) {
+					t = ((Math.log(newC/c)/Math.log(1.02))*31);
+					document.getElementById("BankTime").value = t;
+				}
+			}
+			function enchanted() {
+				var mass = getV("EnchantedHowMuchPerItem");
+				var numEn = getV("EnchantedNumOfEnch");
+				var numNo = getV("EnchantedNumOfNormal");
+				if (numEn.length === 0) {
+					numEn = numNo / mass;
+					document.getElementById("EnchantedNumOfEnch").value = numEn;
+				} else if (numNo.length === 0) {
+					numNo = numEn * mass;
+					document.getElementById("EnchantedNumOfNormal").value = numNo;
+				}
+			}
+		</script>
+	</body>
+</html>
